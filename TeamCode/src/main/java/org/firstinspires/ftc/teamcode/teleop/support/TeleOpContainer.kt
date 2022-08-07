@@ -13,50 +13,60 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys
 import com.arcrobotics.ftclib.util.Timing
 import org.firstinspires.ftc.teamcode.teleop.support.TeleOpContainer
 
+@Strictfp
 abstract class TeleOpContainer : OpMode() {
     /**
      * Drivetrain object from FTCLib
      */
+    @Transient
     protected var drive: MecanumDrive? = null
 
     /**
      * Streamlined IMU object from FTCLib
      */
+    @Transient
     protected var imu: RevIMU? = null
 
     /**
      * Gamepad object from FTCLib
      */
+    @Transient
     protected var driverOp: GamepadEx? = null
 
     /**
      * Stores the state of the field centric variable locally
      */
+    @Transient
     private var FIELD_CENTRIC = false
 
     /**
      * Toggle object to store whether or not the drivetrain is in field centric mode
      */
+    @Transient
     private var fieldCentric: Toggle? = null
 
     /**
      * Timer to keep track of the current time into the match
      */
+    @Transient
     private var matchTimer: Timing.Timer? = null
 
     /**
      * Status variable to signal if the timer is started
      */
+    @Transient
     private var matchTimerStarted = false
 
     /**
      * 3 wheel odo localizer
      */
+    @Transient
     private var myLocalizer: StandardTrackingWheelLocalizer? = null
 
     /**
      * Current robot pose
      */
+    @Transient
     private var myPose: Pose2d? = null
 
     /**
