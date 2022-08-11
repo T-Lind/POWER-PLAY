@@ -82,7 +82,7 @@ abstract class TeleOpContainer : OpMode() {
      * @return The time remaining in the match
      */
     protected val remainingMatchTime: Long
-        protected get() = matchTimer!!.remainingTime()
+        get() = matchTimer!!.remainingTime()
 
     /**
      * Initialize the motors, zero power behavior, drivetrain object, imu, and whatever other
@@ -158,9 +158,9 @@ abstract class TeleOpContainer : OpMode() {
     }
 
     protected val x: Double
-        protected get() = myPose!!.x
+        get() = myPose!!.x
     protected val y: Double
-        protected get() = myPose!!.y
+        get() = myPose!!.y
 
     protected fun getAngle(): Double {
         return myPose!!.heading
@@ -269,7 +269,7 @@ abstract class TeleOpContainer : OpMode() {
     }
 
     private fun convertSpeed(input: Double): Double {
-        return VEL_MULTIPLIER * Math.pow(input, 3.0) + input * (1 - VEL_MULTIPLIER)
+        return VEL_MULTIPLIER * Math.pow(input, 5.0) + input * (1 - VEL_MULTIPLIER)
     }
 
     /**
@@ -286,6 +286,6 @@ abstract class TeleOpContainer : OpMode() {
         /**
          * Constant to multiply velocities by to improve motion
          */
-        private const val VEL_MULTIPLIER = 0.9
+        private const val VEL_MULTIPLIER = 1
     }
 }

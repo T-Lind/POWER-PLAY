@@ -26,6 +26,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -268,6 +269,24 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear.setPower(v1);
         rightRear.setPower(v2);
         rightFront.setPower(v3);
+    }
+
+    public void setMotorVelEstimateLinear(double v, double v1, double v2, double v3) {
+        leftFront.setPower(1.3*v);
+        leftRear.setPower(1.3*v1);
+        rightRear.setPower(1.3*v2);
+        rightFront.setPower(1.3*v3);
+    }
+
+    public void setMotorVelocitiesRads(double v, double v1, double v2, double v3) {
+        leftFront.setVelocity(v, AngleUnit.RADIANS);
+        leftRear.setVelocity(v1, AngleUnit.RADIANS);
+        rightRear.setVelocity(v2, AngleUnit.RADIANS);
+        rightFront.setVelocity(v3, AngleUnit.RADIANS);
+    }
+
+    public void stop() {
+        setMotorPowers(0, 0, 0, 0);
     }
 
     @Override
