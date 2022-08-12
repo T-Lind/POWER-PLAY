@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.custompurepursuit;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 
@@ -12,13 +13,14 @@ public class Follower {
     private StandardTrackingWheelLocalizer localizer;
     private HardwareMap hardwareMap;
     private SampleMecanumDrive drive;
+    private Telemetry telemetry;
 
 
     private static final double IN_TO_M = 0.0254;
 
 
-    public static double KP = 3.5;
-    public static double KI = 2.0;
+    public static double KP = 1;
+    public static double KI = 1.0;
     public static double KD = 1.5;
     public static double KF = 0.5;
 
@@ -31,6 +33,11 @@ public class Follower {
         this.hardwareMap = hardwareMap;
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
+    }
+
+    public Follower telemetry(Telemetry telemetry){
+        this.telemetry = telemetry;
+        return this;
     }
 
     /**
@@ -87,8 +94,10 @@ public class Follower {
      * @param points the points to go to
      */
     public void followSequence(Point currentPos, ArrayList<Point> points){
-        for(Point point : points){
-            currentPos = goToPositionConstantHeading(currentPos, point, 0.5);
+        for(int i=0;i<points.size();i++){
+            telemetry.addData("Waypoint being followed:",i);
+            telemetry.update();
+            currentPos = goToPositionConstantHeading(currentPos, points.get(i), 0.5);
         }
     }
 

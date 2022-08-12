@@ -34,12 +34,22 @@ public class PurePursuitTest extends LinearOpMode {
 
         Sequence sequence = new Sequence(hardwareMap)
                 .startPos(currentPos)
-                .bezier(6,
-                        new Point(0, 0),
-                        new Point(0.25, 2),
-                        new Point(1, 0),
-                        new Point(0.25,0).maximumAllowableDeviation(0.05))
-                .forward(0.25);
+                .telemetry(telemetry)
+//                .bezier(6, 0.05,
+//                        new Point(0, 0),
+//                        new Point(0.25, 2),
+//                        new Point(1, 0),
+//                        new Point(0.25,0))
+                .forward(0.25)
+                .strafeRight(0.5)
+                .back(0.25)
+                .strafeLeft(0.5)
+                .forward(0.25)
+                .strafeRight(0.5)
+                .back(0.25)
+                .strafeLeft(0.5)
+                ;
+
 
 
         waitForStart();

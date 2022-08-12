@@ -2,13 +2,18 @@ package org.firstinspires.ftc.teamcode.custompurepursuit;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.custompurepursuit.bezier.BezierCurve;
 
 import java.util.ArrayList;
 
+/**
+ * A class to follow a set of pathing commands using the custom pure pursuit library
+ */
 public class Sequence {
     private Follower follower;
     private Point startPos;
+    private Telemetry telemetry;
 
     private ArrayList<Point> waypoints;
 
@@ -17,6 +22,12 @@ public class Sequence {
         startPos = new Point(0,0);
         waypoints = new ArrayList<>();
         waypoints.add(startPos);
+    }
+
+    public Sequence telemetry(Telemetry telemetry){
+        follower.telemetry(telemetry);
+        this.telemetry = telemetry;
+        return this;
     }
 
     public Sequence startPos(Point startPos){
@@ -103,6 +114,25 @@ public class Sequence {
             throw new RuntimeException("Cannot bezier curve with no points!");
 
         waypoints.addAll(BezierCurve.generate(numWaypoints, controlPoints));
+
+        return this;
+    }
+
+    /**
+     * Strafe left a certain distance
+     * @param controlPoints the points to construct a bezier curve with
+     * @return this object to be used in a builder design pattern
+     */
+    public Sequence bezier(int numWaypoints, double maxAllowableDeviation, Point... controlPoints){
+        if(controlPoints.length == 0)
+            throw new RuntimeException("Cannot bezier curve with no points!");
+
+        ArrayList<Point> points = (BezierCurve.generate(numWaypoints, controlPoints));
+        for(Point p1 : points){
+            p1.maxAllowableDeviation = maxAllowableDeviation;
+        }
+
+        waypoints.addAll(points);
 
         return this;
     }
