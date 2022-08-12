@@ -285,6 +285,19 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightFront.setVelocity(v3, AngleUnit.RADIANS);
     }
 
+    public DcMotorEx getFL(){
+        return leftFront;
+    }
+    public DcMotorEx getFR(){
+        return rightFront;
+    }
+    public DcMotorEx getBL(){
+        return leftRear;
+    }
+    public DcMotorEx getBR(){
+        return rightRear;
+    }
+
     public void stop() {
         setMotorPowers(0, 0, 0, 0);
     }

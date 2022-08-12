@@ -1,13 +1,16 @@
 package org.firstinspires.ftc.teamcode.experimental;
 
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.custompurepursuit.Follower;
 import org.firstinspires.ftc.teamcode.custompurepursuit.Point;
+import org.firstinspires.ftc.teamcode.custompurepursuit.Sequence;
 import org.firstinspires.ftc.teamcode.custompurepursuit.bezier.BezierCurve;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.openftc.revextensions2.ExpansionHubEx;
 
 import java.util.ArrayList;
 
@@ -24,27 +27,27 @@ public class PurePursuitTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Point currentPos = new Point(0, 0);
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        ExpansionHubEx hub = hardwareMap.get(ExpansionHubEx.class, "Control Hub");
+        hub.setLedColor(255, 255, 0);
+
+
+        Sequence sequence = new Sequence(hardwareMap)
+                .startPos(currentPos)
+                .bezier(6,
+                        new Point(0, 0),
+                        new Point(0.25, 2),
+                        new Point(1, 0),
+                        new Point(0.25,0).maximumAllowableDeviation(0.05))
+                .forward(0.25);
 
 
         waitForStart();
 
-//        ArrayList<Point> controlPoints = new ArrayList<>();
-//
-//        controlPoints.add(new Point(0, 0));
-//        controlPoints.add(new Point(0.25, 4));
-//        controlPoints.add(new Point(2, 0));
-//        controlPoints.add(new Point(0.25,0, 0.05));
-//
-//        Follower f = new Follower(hardwareMap, drive);
-//
-//        f.followSequence(currentPos, BezierCurve.generate(controlPoints, 12));
-
-        Follower f = new Follower(hardwareMap, drive);
-        f.goToPosition(currentPos, new Point(0.25, 0.5)
-                .setMaximumAllowableDeviation(0.05), 0);
+        sequence.follow();
 
 
-        drive.stop();
+        hub.setLedColor(0,255,0);
+
     }
 }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.custompurepursuit.bezier;
 import org.firstinspires.ftc.teamcode.custompurepursuit.Point;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A class to generate points along a bezier curve given a certain set of inputs. A class completely
@@ -52,10 +53,13 @@ public class BezierCurve {
      *                            (resolution of the path)
      * @return the ArrayList of points along the path.
      */
-    public static ArrayList<Point> generate(ArrayList<Point> controlPoints, int numPointsToGenerate){
+    public static ArrayList<Point> generate(int numPointsToGenerate, Point... controlPoints){
+        ArrayList<Point> cP = new ArrayList<>(Arrays.asList(controlPoints));
+
+
         ArrayList<Point> points = new ArrayList<>();
         for(double time=0;time<1;time+=1.0/numPointsToGenerate){
-            points.add(recursiveLerp(controlPoints, time));
+            points.add(recursiveLerp(cP, time));
         }
 
         return points;

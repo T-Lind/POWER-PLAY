@@ -11,7 +11,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor
 import org.firstinspires.ftc.teamcode.teleop.PoseStorage
 import com.arcrobotics.ftclib.gamepad.GamepadKeys
 import com.arcrobotics.ftclib.util.Timing
-import org.firstinspires.ftc.teamcode.teleop.support.TeleOpContainer
+import kotlin.math.pow
 
 @Strictfp
 abstract class TeleOpContainer : OpMode() {
@@ -37,7 +37,7 @@ abstract class TeleOpContainer : OpMode() {
      * Stores the state of the field centric variable locally
      */
     @Transient
-    private var FIELD_CENTRIC = false
+    private var isFieldCentric = false
 
     /**
      * Toggle object to store whether or not the drivetrain is in field centric mode
@@ -74,7 +74,7 @@ abstract class TeleOpContainer : OpMode() {
      * @return If the drivetrain is in field centric mode or not
      */
     protected fun getFieldCentric(): Boolean {
-        return FIELD_CENTRIC
+        return isFieldCentric
     }
 
     /**
@@ -182,7 +182,7 @@ abstract class TeleOpContainer : OpMode() {
         // right stick x value respectively. These values are passed in to represent the
         // strafing speed, the forward speed, and the turning speed of the robot frame
         // respectively from [-1, 1].
-        if (!FIELD_CENTRIC) {
+        if (!isFieldCentric) {
 
             // For a robot centric model, the input of (0,1,0) for (leftX, leftY, rightX)
             // will move the robot in the direction of its current heading. Every movement
@@ -253,7 +253,7 @@ abstract class TeleOpContainer : OpMode() {
     private fun updateDriveType() {
         // Use the left bumper to switch whether or not the drive type is field centric
         fieldCentric!!.updateLeadingEdge(driverOp!!.getButton(GamepadKeys.Button.LEFT_BUMPER))
-        FIELD_CENTRIC = fieldCentric!!.toggleState
+        isFieldCentric = fieldCentric!!.toggleState
     }
 
     /**
@@ -261,15 +261,19 @@ abstract class TeleOpContainer : OpMode() {
      * so they're started speaking ahead of where they should be.
      */
     private fun alertToTiming() {
-        if (matchTimer!!.elapsedTime() == 30L) telemetry.speak("30 seconds into tele-op") else if (matchTimer!!.remainingTime() == 45L) telemetry.speak(
-            "15 seconds until end game"
-        ) else if (matchTimer!!.remainingTime() == 5L) telemetry.speak("three") else if (matchTimer!!.remainingTime() == 3L) telemetry.speak(
-            "two"
-        ) else if (matchTimer!!.remainingTime() == 1L) telemetry.speak("one")
+        if (matchTimer!!.elapsedTime() == 30L) telemetry.speak("30 seconds into tele-op")
+
+        else if (matchTimer!!.remainingTime() == 45L) telemetry.speak("15 seconds until end game")
+
+        else if (matchTimer!!.remainingTime() == 5L) telemetry.speak("three")
+
+        else if (matchTimer!!.remainingTime() == 3L) telemetry.speak("two")
+
+        else if (matchTimer!!.remainingTime() == 1L) telemetry.speak("one")
     }
 
     private fun convertSpeed(input: Double): Double {
-        return VEL_MULTIPLIER * Math.pow(input, 5.0) + input * (1 - VEL_MULTIPLIER)
+        return VEL_MULTIPLIER * input.pow(5.0) + input * (1 - VEL_MULTIPLIER)
     }
 
     /**

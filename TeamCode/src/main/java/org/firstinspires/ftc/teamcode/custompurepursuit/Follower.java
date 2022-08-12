@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.custompurepursuit;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 
@@ -31,10 +27,10 @@ public class Follower {
      * Assign the hardware map to the localizer
      * @param hardwareMap the opMode's hardware map
      */
-    public Follower(HardwareMap hardwareMap, SampleMecanumDrive drive) {
+    public Follower(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
-        this.drive = drive;
+        drive = new SampleMecanumDrive(hardwareMap);
     }
 
     /**
@@ -43,7 +39,7 @@ public class Follower {
      * @param p1 is the point to go to
      * @param pidFactor the amount to multiply the PID output by
      */
-    public Point goToPosition(Point p0, Point p1, double pidFactor) {
+    public Point goToPositionConstantHeading(Point p0, Point p1, double pidFactor) {
         PIDFController xPID = new PIDFController(KP, KI, KD, KF);
         PIDFController yPID = new PIDFController(KP, KI, KD, KF);
         PIDFController headingPID = new PIDFController(KP, KI, KD, KF);
@@ -69,7 +65,7 @@ public class Follower {
 
             double xCorrect = xPID.calculate(xPos, x1);
             double yCorrect = yPID.calculate(yPos, y1);
-            double headingCorrect = 1E-2*headingPID.calculate(heading, 0);
+            double headingCorrect = 1E-3*headingPID.calculate(heading, 0);
 
 
             drive.setMotorPowers(
@@ -92,7 +88,11 @@ public class Follower {
      */
     public void followSequence(Point currentPos, ArrayList<Point> points){
         for(Point point : points){
-            currentPos = goToPosition(currentPos, point, 0.5);
+            currentPos = goToPositionConstantHeading(currentPos, point, 0.5);
         }
+    }
+
+    public void stop(){
+        drive.stop();
     }
 }
