@@ -29,16 +29,21 @@ public class PurePursuitTest extends LinearOpMode {
 
         waitForStart();
 
-        ArrayList<Point> controlPoints = new ArrayList<>();
-
-        controlPoints.add(new Point(0, 0));
-        controlPoints.add(new Point(0.25, 2));
-        controlPoints.add(new Point(1.5, 0));
-        controlPoints.add(new Point(0.25,0, 0.1));
+//        ArrayList<Point> controlPoints = new ArrayList<>();
+//
+//        controlPoints.add(new Point(0, 0));
+//        controlPoints.add(new Point(0.25, 4));
+//        controlPoints.add(new Point(2, 0));
+//        controlPoints.add(new Point(0.25,0, 0.05));
+//
+//        Follower f = new Follower(hardwareMap, drive);
+//
+//        f.followSequence(currentPos, BezierCurve.generate(controlPoints, 12));
 
         Follower f = new Follower(hardwareMap, drive);
+        f.goToPosition(currentPos, new Point(0.25, 0.5)
+                .setMaximumAllowableDeviation(0.05), 0);
 
-        f.followSequence(currentPos, BezierCurve.generate(controlPoints, 10));
 
         drive.stop();
     }

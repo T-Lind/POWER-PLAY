@@ -21,13 +21,11 @@ public class Follower {
     private static final double IN_TO_M = 0.0254;
 
 
-    public static double KP = 3;
-    public static double KI = 1.5;
-    public static double KD = 0.5;
+    public static double KP = 3.5;
+    public static double KI = 2.0;
+    public static double KD = 1.5;
     public static double KF = 0.5;
 
-    private PIDFController xPID = new PIDFController(KP, KI, KD, KF);
-    private PIDFController yPID = new PIDFController(KP, KI, KD, KF);
 
     /**
      * Assign the hardware map to the localizer
@@ -41,10 +39,14 @@ public class Follower {
 
     /**
      * A pure pursuit algorithm to go to a certain position using PIDF
+     * @param p0 is the starting point
      * @param p1 is the point to go to
      * @param pidFactor the amount to multiply the PID output by
      */
     public Point goToPosition(Point p0, Point p1, double pidFactor) {
+        PIDFController xPID = new PIDFController(KP, KI, KD, KF);
+        PIDFController yPID = new PIDFController(KP, KI, KD, KF);
+        PIDFController headingPID = new PIDFController(KP, KI, KD, KF);
 
         double x1 = p1.subtract(p0).x;
         double y1 = p1.subtract(p0).y;
@@ -63,16 +65,18 @@ public class Follower {
 
             double xPos = localizer.getPoseEstimate().getX()*IN_TO_M;
             double yPos = localizer.getPoseEstimate().getY()*IN_TO_M;
+            double heading = localizer.getPoseEstimate().getHeading();
 
             double xCorrect = xPID.calculate(xPos, x1);
             double yCorrect = yPID.calculate(yPos, y1);
+            double headingCorrect = 1E-2*headingPID.calculate(heading, 0);
 
 
             drive.setMotorPowers(
-                    pidFactor*(xCorrect+yCorrect),
-                    pidFactor*(xCorrect-yCorrect),
-                    pidFactor*(xCorrect+yCorrect),
-                    pidFactor*(xCorrect-yCorrect)
+                    pidFactor*(xCorrect+yCorrect)-headingCorrect,
+                    pidFactor*(xCorrect-yCorrect)-headingCorrect,
+                    pidFactor*(xCorrect+yCorrect)+headingCorrect,
+                    pidFactor*(xCorrect-yCorrect)+headingCorrect
             );
 
             positionError = Math.hypot(x1-xPos, y1-yPos);
@@ -81,6 +85,11 @@ public class Follower {
         return new Point(localizer.getPoseEstimate().getX()*IN_TO_M, localizer.getPoseEstimate().getY()*IN_TO_M);
     }
 
+    /**
+     * Follow a set of points with a constant heading
+     * @param currentPos the current position
+     * @param points the points to go to
+     */
     public void followSequence(Point currentPos, ArrayList<Point> points){
         for(Point point : points){
             currentPos = goToPosition(currentPos, point, 0.5);
