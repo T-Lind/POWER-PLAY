@@ -48,6 +48,7 @@ import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.kA;
 import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.kV;
 
+
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
  */
@@ -269,37 +270,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear.setPower(v1);
         rightRear.setPower(v2);
         rightFront.setPower(v3);
-    }
-
-    public void setMotorVelEstimateLinear(double v, double v1, double v2, double v3) {
-        leftFront.setPower(1.3*v);
-        leftRear.setPower(1.3*v1);
-        rightRear.setPower(1.3*v2);
-        rightFront.setPower(1.3*v3);
-    }
-
-    public void setMotorVelocitiesRads(double v, double v1, double v2, double v3) {
-        leftFront.setVelocity(v, AngleUnit.RADIANS);
-        leftRear.setVelocity(v1, AngleUnit.RADIANS);
-        rightRear.setVelocity(v2, AngleUnit.RADIANS);
-        rightFront.setVelocity(v3, AngleUnit.RADIANS);
-    }
-
-    public DcMotorEx getFL(){
-        return leftFront;
-    }
-    public DcMotorEx getFR(){
-        return rightFront;
-    }
-    public DcMotorEx getBL(){
-        return leftRear;
-    }
-    public DcMotorEx getBR(){
-        return rightRear;
-    }
-
-    public void stop() {
-        setMotorPowers(0, 0, 0, 0);
     }
 
     @Override

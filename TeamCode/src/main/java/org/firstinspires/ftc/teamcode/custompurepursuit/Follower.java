@@ -103,6 +103,6 @@ public class Follower {
     }
 
     public void stop(){
-        drive.stop();
+//        drive.stop();
     }
 }
