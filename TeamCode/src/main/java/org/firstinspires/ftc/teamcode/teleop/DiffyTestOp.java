@@ -111,16 +111,11 @@ public class DiffyTestOp extends OpMode {
             BRP = -left_stick_y * -VEL_COEFF - left_stick_x * VEL_COEFF;
 
             // add turning motion
-            FLP += right_stick_x*0.5*VEL_COEFF;
-            BLP += -right_stick_x*0.5*VEL_COEFF;
-            FRP += right_stick_x*0.5*VEL_COEFF;
-            BRP += -right_stick_x*0.5*VEL_COEFF;
-
-            if(left_stick_x > 0){
-                FLP*=-1;
-                FRP*=-1;
-                BLP*=-1;
-                BRP*=-1;
+            if(left_stick_x < 0){
+                FLP += right_stick_x*0.5*VEL_COEFF;
+                BLP += -right_stick_x*0.5*VEL_COEFF;
+                FRP += right_stick_x*0.5*VEL_COEFF;
+                BRP += -right_stick_x*0.5*VEL_COEFF;
             }
         }
 
@@ -132,10 +127,10 @@ public class DiffyTestOp extends OpMode {
         FRP /= max;
         BRP /= max;
 
-        leftFront.setPower(FLP*0.5);
-        leftBack.setPower(BLP*0.5);
-        rightFront.setPower(FRP*0.5);
-        rightBack.setPower(BRP*0.5);
+        leftFront.setPower(FLP);
+        leftBack.setPower(BLP);
+        rightFront.setPower(FRP);
+        rightBack.setPower(BRP);
 
 
         // Add telemetry data
