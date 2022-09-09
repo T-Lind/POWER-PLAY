@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.teleop.support.TeleOpContainer;
+import org.firstinspires.ftc.teamcode.teleop.support.MecTeleOpContainer;
 
 
 /**
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.teleop.support.TeleOpContainer;
  * with basic TeleOp controls.
  */
 @TeleOp(name="BaseOp")
-public class BaseOp extends TeleOpContainer {
+public class BaseOpMec extends MecTeleOpContainer {
 //    protected ServoEx servo;
     @Override
     protected void initSpecificMechanisms() {

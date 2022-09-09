@@ -1,26 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleop.support
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.arcrobotics.ftclib.drivebase.MecanumDrive
-import com.qualcomm.robotcore.eventloop.opmode.OpMode
-import com.arcrobotics.ftclib.hardware.RevIMU
 import com.arcrobotics.ftclib.gamepad.GamepadEx
-import org.firstinspires.ftc.teamcode.teleop.Toggle
-import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
+import com.arcrobotics.ftclib.hardware.RevIMU
 import com.arcrobotics.ftclib.hardware.motors.Motor
-import org.firstinspires.ftc.teamcode.teleop.PoseStorage
-import com.arcrobotics.ftclib.gamepad.GamepadKeys
 import com.arcrobotics.ftclib.util.Timing
-import kotlin.math.pow
+import com.qualcomm.robotcore.eventloop.opmode.OpMode
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
+import org.firstinspires.ftc.teamcode.teleop.PoseStorage
 
 @Strictfp
-abstract class TeleOpContainer : OpMode() {
-    /**
-     * Drivetrain object from FTCLib
-     */
-    @Transient
-    protected var drive: MecanumDrive? = null
-
+abstract class UniversalTeleopContainer : OpMode(){
     /**
      * Streamlined IMU object from FTCLib
      */
@@ -33,17 +23,6 @@ abstract class TeleOpContainer : OpMode() {
     @Transient
     protected var driverOp: GamepadEx? = null
 
-    /**
-     * Stores the state of the field centric variable locally
-     */
-    @Transient
-    private var isFieldCentric = false
-
-    /**
-     * Toggle object to store whether or not the drivetrain is in field centric mode
-     */
-    @Transient
-    private var fieldCentric: Toggle? = null
 
     /**
      * Timer to keep track of the current time into the match
@@ -69,13 +48,10 @@ abstract class TeleOpContainer : OpMode() {
     @Transient
     private var myPose: Pose2d? = null
 
-    /**
-     * Method to get the field centric state variable for displaying in telemetry, etc.
-     * @return If the drivetrain is in field centric mode or not
-     */
-    protected fun getFieldCentric(): Boolean {
-        return isFieldCentric
-    }
+    protected lateinit var frontLeft: Motor
+    protected lateinit var frontRight: Motor
+    protected lateinit var backLeft: Motor
+    protected lateinit var backRight: Motor
 
     /**
      * Method to get the remaining time used in the match for displaying in telemetry, etc.
@@ -92,22 +68,16 @@ abstract class TeleOpContainer : OpMode() {
 
         // constructor takes in frontLeft, frontRight, backLeft, backRight motors
         // IN THAT ORDER
-        val frontLeft = Motor(hardwareMap, "FL", Motor.GoBILDA.RPM_312)
-        val frontRight = Motor(hardwareMap, "FR", Motor.GoBILDA.RPM_312)
-        val backLeft = Motor(hardwareMap, "BL", Motor.GoBILDA.RPM_312)
-        val backRight = Motor(hardwareMap, "BR", Motor.GoBILDA.RPM_312)
+        frontLeft = Motor(hardwareMap, "FL", Motor.GoBILDA.RPM_312)
+        frontRight = Motor(hardwareMap, "FR", Motor.GoBILDA.RPM_312)
+        backLeft = Motor(hardwareMap, "BL", Motor.GoBILDA.RPM_312)
+        backRight = Motor(hardwareMap, "BR", Motor.GoBILDA.RPM_312)
 
         // Sets zero power behavior to braking
         frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         backLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
         backRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE)
-        drive = MecanumDrive(
-            frontLeft,
-            frontRight,
-            backLeft,
-            backRight
-        )
 
         // This is the built-in IMU in the REV hub.
         // We're initializing it by its default parameters
@@ -134,10 +104,6 @@ abstract class TeleOpContainer : OpMode() {
 
         // Create the extended gamepad object
         driverOp = GamepadEx(gamepad1)
-
-        // Create a new toggle object for field-robot centric switching mid match
-        fieldCentric = Toggle(true)
-
 
         // This is assuming you are using StandardTrackingWheelLocalizer.java
         // Switch this class to something else (Like TwoWheeTrackingLocalizer.java) if your
@@ -176,66 +142,6 @@ abstract class TeleOpContainer : OpMode() {
             matchTimerStarted = true
         }
 
-
-        // Driving the mecanum base takes 3 joystick parameters: leftX, leftY, rightX.
-        // These are related to the left stick x value, left stick y value, and
-        // right stick x value respectively. These values are passed in to represent the
-        // strafing speed, the forward speed, and the turning speed of the robot frame
-        // respectively from [-1, 1].
-        if (!isFieldCentric) {
-
-            // For a robot centric model, the input of (0,1,0) for (leftX, leftY, rightX)
-            // will move the robot in the direction of its current heading. Every movement
-            // is relative to the frame of the robot itself.
-            //
-            //                 (0,1,0)
-            //                   /
-            //                  /
-            //           ______/_____
-            //          /           /
-            //         /           /
-            //        /___________/
-            //           ____________
-            //          /  (0,0,1)  /
-            //         /     ↻     /
-            //        /___________/
-
-            // optional fourth parameter for squared inputs
-            drive!!.driveRobotCentric(
-                convertSpeed(driverOp!!.leftX),
-                convertSpeed(driverOp!!.leftY),
-                convertSpeed(driverOp!!.rightX),
-                false
-            )
-        } else {
-
-            // Below is a model for how field centric will drive when given the inputs
-            // for (leftX, leftY, rightX). As you can see, for (0,1,0), it will travel forward
-            // regardless of the heading. For (1,0,0) it will strafe right (ref to the 0 heading)
-            // regardless of the heading.
-            //
-            //                   heading
-            //                     /
-            //            (0,1,0) /
-            //               |   /
-            //               |  /
-            //            ___|_/_____
-            //          /           /
-            //         /           / ---------- (1,0,0)
-            //        /__________ /
-
-            // optional fifth parameter for squared inputs
-            drive!!.driveFieldCentric(
-                convertSpeed(driverOp!!.leftX),
-                convertSpeed(driverOp!!.leftY),
-                convertSpeed(driverOp!!.rightX),
-                imu!!.rotation2d.degrees,  // gyro value passed in here must be in degrees
-                false
-            )
-        }
-        // Update what type of driving type is used
-        updateDriveType()
-
         // Alert the driver to the amount of time left through a voice command.
         alertToTiming()
         myLocalizer!!.update()
@@ -245,15 +151,6 @@ abstract class TeleOpContainer : OpMode() {
 
         // Update the mechanisms
         updateMechanisms()
-    }
-
-    /**
-     * Check to see whether or not to change the driving type
-     */
-    private fun updateDriveType() {
-        // Use the left bumper to switch whether or not the drive type is field centric
-        fieldCentric!!.updateLeadingEdge(driverOp!!.getButton(GamepadKeys.Button.LEFT_BUMPER))
-        isFieldCentric = fieldCentric!!.toggleState
     }
 
     /**
@@ -272,10 +169,6 @@ abstract class TeleOpContainer : OpMode() {
         else if (matchTimer!!.remainingTime() == 1L) telemetry.speak("one")
     }
 
-    private fun convertSpeed(input: Double): Double {
-        return VEL_MULTIPLIER * input.pow(5.0) + input * (1 - VEL_MULTIPLIER)
-    }
-
     /**
      * Abstract method to initialize specific mechanisms you want for a teleop
      */
@@ -285,11 +178,4 @@ abstract class TeleOpContainer : OpMode() {
      * Abstract method to update any mechanisms that you're running
      */
     protected abstract fun updateMechanisms()
-
-    companion object {
-        /**
-         * Constant to multiply velocities by to improve motion
-         */
-        private const val VEL_MULTIPLIER = 1
-    }
 }
