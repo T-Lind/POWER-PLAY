@@ -84,12 +84,6 @@ abstract class DiffyTeleOpContainer : UniversalTeleopContainer() {
             BLP += -right_stick_x * 0.5 * VEL_COEFF
             FRP += right_stick_x * 0.5 * VEL_COEFF
             BRP += -right_stick_x * 0.5 * VEL_COEFF
-            if (left_stick_x > 0) {
-                FLP *= -1.0
-                FRP *= -1.0
-                BLP *= -1.0
-                BRP *= -1.0
-            }
         }
 
 
@@ -99,10 +93,10 @@ abstract class DiffyTeleOpContainer : UniversalTeleopContainer() {
         FRP /= max
         BRP /= max
 
-        frontLeft.set(FLP * 0.5)
-        backLeft.set(BLP * 0.5)
-        frontRight.set(FRP * 0.5)
-        backRight.set(BRP * 0.5)
+        frontLeft.set(FLP)
+        backLeft.set(BLP)
+        frontRight.set(FRP)
+        backRight.set(BRP )
 
     }
 }
