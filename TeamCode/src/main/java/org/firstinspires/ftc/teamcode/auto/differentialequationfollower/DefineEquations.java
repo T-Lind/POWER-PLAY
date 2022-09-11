@@ -5,3 +5,4 @@ public interface DefineEquations {
     double getY(double time);
     double getHeading(double time);
 }
+

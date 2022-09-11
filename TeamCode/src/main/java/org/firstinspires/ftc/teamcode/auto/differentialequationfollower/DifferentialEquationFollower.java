@@ -16,6 +16,7 @@ public class DifferentialEquationFollower {
     private Motor backLeft;
     private Motor backRight;
 
+
     public DifferentialEquationFollower(DefineEquations equations, HardwareMap hardwareMap){
         this.equations = equations;
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
