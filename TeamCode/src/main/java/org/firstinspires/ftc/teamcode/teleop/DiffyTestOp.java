@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+@Disabled
 @TeleOp(name="DiffyTestOp")
 public class DiffyTestOp extends OpMode {
     private DcMotorEx leftFront, leftBack, rightFront, rightBack;
@@ -112,10 +113,10 @@ public class DiffyTestOp extends OpMode {
 
             // add turning motion
             if(left_stick_x < 0){
-                FLP += right_stick_x*0.5*VEL_COEFF;
-                BLP += -right_stick_x*0.5*VEL_COEFF;
-                FRP += right_stick_x*0.5*VEL_COEFF;
-                BRP += -right_stick_x*0.5*VEL_COEFF;
+                FLP += right_stick_x*0.1*VEL_COEFF;
+                BLP += -right_stick_x*0.1*VEL_COEFF;
+                FRP += right_stick_x*0.1*VEL_COEFF;
+                BRP += -right_stick_x*0.1*VEL_COEFF;
             }
         }
 

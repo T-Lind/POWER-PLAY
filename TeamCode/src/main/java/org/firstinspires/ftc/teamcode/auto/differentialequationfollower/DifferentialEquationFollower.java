@@ -53,7 +53,7 @@ public class DifferentialEquationFollower {
             double currentY = localizer.getPoseEstimate().getY();
             double currentHeading = localizer.getPoseEstimate().getHeading();
 
-            xPid.calculate(currentX, targetX)
+//            xPid.calculate(currentX, targetX)
         }
     }
 }
