@@ -16,7 +16,6 @@ public class TestDiffyContainer extends DiffyTeleOpContainer {
     private PIDFController leftPodPIDF;
     private PIDFController rightPodPIDF;
 
-
     private double getPodAngle(String pod){
         if(pod.equals("left")){
             return leftPodEncoder.getDistance()/8192.0*360;
