@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.teleop.support.DiffyTeleOpContainer;
 
 @TeleOp
-public class TestDiffyContainer extends DiffyTeleOpContainer {
+public class DiffyBaseOp extends DiffyTeleOpContainer {
     private Motor leftPodEncoder;
     private Motor rightPodEncoder;
 
@@ -79,7 +79,7 @@ public class TestDiffyContainer extends DiffyTeleOpContainer {
             BRP = powerRightVal;
         }
 
-        double max = Math.max(Math.max(FLP, FRP), Math.max(BRP, BRP));
+        double max = Math.max(Math.max(FLP, FRP), Math.max(BLP, BRP));
         FLP /= max;
         BRP /= max;
         BLP /= max;
