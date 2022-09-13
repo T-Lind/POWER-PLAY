@@ -47,13 +47,14 @@ public class DiffyBaseOp extends DiffyTeleOpContainer {
         telemetry.addData("Left encoder:", leftAngle);
         telemetry.addData("Right encoder", rightAngle);
 
-        double left_stick_x = gamepad1.left_stick_x;
-        double left_stick_y = -gamepad1.left_stick_y;
-        double right_stick_x = gamepad1.right_stick_x;
+        double leftStickX = gamepad1.left_stick_x;
+        double leftStickY = -gamepad1.left_stick_y;
+        double rightStickX = gamepad1.right_stick_x;
 
-        double stickAngle = Math.toDegrees(Math.atan2(-left_stick_x, left_stick_y));
-        double stickMagnitude = Math.hypot(left_stick_x, left_stick_y);
-        if(left_stick_x == 0 && left_stick_y == 0)
+
+        double stickAngle = Math.toDegrees(Math.atan2(-leftStickX, leftStickY));
+        double stickMagnitude = Math.hypot(leftStickX, leftStickY);
+        if(leftStickX == 0 && leftStickY == 0)
             stickAngle = 0;
 
         double powerLeftVal = leftPodPIDF.calculate(leftAngle, stickAngle);
@@ -66,11 +67,12 @@ public class DiffyBaseOp extends DiffyTeleOpContainer {
         double FRP;
         double BRP;
 
-        if(avgError < 10){
-            FLP = powerLeftVal+stickMagnitude;
-            BLP = powerLeftVal-stickMagnitude;
-            FRP = powerRightVal+stickMagnitude;
-            BRP = powerRightVal-stickMagnitude;
+        if(avgError < 90){
+
+            FLP = powerLeftVal+stickMagnitude+rightStickX;
+            BLP = powerLeftVal-stickMagnitude-rightStickX;
+            FRP = powerRightVal+stickMagnitude-rightStickX;
+            BRP = powerRightVal-stickMagnitude+rightStickX;
         }
         else{
             FLP = powerLeftVal;
@@ -79,11 +81,11 @@ public class DiffyBaseOp extends DiffyTeleOpContainer {
             BRP = powerRightVal;
         }
 
-        double max = Math.max(Math.max(FLP, FRP), Math.max(BLP, BRP));
-        FLP /= max;
-        BRP /= max;
-        BLP /= max;
-        FRP /= max;
+//        double max = Math.max(Math.max(FLP, FRP), Math.max(BLP, BRP));
+//        FLP /= max;
+//        BRP /= max;
+//        BLP /= max;
+//        FRP /= max;
 
         frontLeft.set(FLP);
         backLeft.set(BLP);
