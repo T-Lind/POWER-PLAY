@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLoca
  *
  * PIDF tuning - tune the PIDF objects for the pod heading PID values and x/y PID values
  */
-public class SampleDifferentialSwerve implements Cloneable{
+public class SampleDifferentialSwerve {
     // TODO: Change these objects to keep track of pod angles based on your system
     private Motor leftPodEncoder;
     private Motor rightPodEncoder;
@@ -43,6 +43,10 @@ public class SampleDifferentialSwerve implements Cloneable{
 
     private PIDFController leftPodPIDF;
     private PIDFController rightPodPIDF;
+
+    private PIDFController xPid;
+    private PIDFController yPid ;
+    private PIDFController headingPid;
 
     private double FLP;
     private double FRP;
@@ -94,6 +98,10 @@ public class SampleDifferentialSwerve implements Cloneable{
         rightPodPIDF = new PIDFController(0.065, 0, 0.0015, 0.001);
 
 
+        // X, Y, and heading PIDF
+        xPid = new PIDFController(3, 0.5, 0.5, 0.5);
+        yPid = new PIDFController(3, 0.5, 0.5, 0.5);
+        headingPid = new PIDFController(3, 0.5, 0.5, 0.5);
     }
 
     public double getLeftPodAngle(){
@@ -244,8 +252,7 @@ public class SampleDifferentialSwerve implements Cloneable{
         return Math.toDegrees(localizer.getPoseEstimate().getHeading());
     }
 
-    @Override
-    public SampleDifferentialSwerve clone() {
-        return new SampleDifferentialSwerve(hardwareMap);
+    private PIDFController copyPIDF(PIDFController input){
+        return new PIDFController(input.getP(), input.getI(), input.getD(), input.getF());
     }
 }
