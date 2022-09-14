@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.coyote.coyote.SampleDifferentialSwerve;
+import org.firstinspires.ftc.teamcode.coyote.auto.SampleDifferentialSwerve;
 
 /**
  * A testing program to invert the appropriate motors. The intended behavior is that both pods

@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.coyote;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.coyote.coyote.DefineEquations;
-import org.firstinspires.ftc.teamcode.coyote.coyote.SampleDifferentialSwerve;
+import org.firstinspires.ftc.teamcode.coyote.auto.DefineEquations;
+import org.firstinspires.ftc.teamcode.coyote.auto.SampleDifferentialSwerve;
 
 /**
  * An example class to move in a straight line according to a sine position curve for five seconds.

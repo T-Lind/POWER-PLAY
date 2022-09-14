@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.coyote.coyote;
+package org.firstinspires.ftc.teamcode.coyote.auto;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.coyote.teleop.container.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 
 /**
@@ -54,6 +55,7 @@ public class SampleDifferentialSwerve implements Cloneable{
         this.hardwareMap = hardwareMap;
 
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
+        localizer.setPoseEstimate(PoseStorage.currentPose);
 
         // TODO: Edit the ID tags based on what your configuration says
         frontLeft = new Motor(hardwareMap, "FL", Motor.GoBILDA.RPM_312);
@@ -86,6 +88,8 @@ public class SampleDifferentialSwerve implements Cloneable{
 
     public void createTunedPIDF(){
         // TODO: Edit all these values to work with your drivetrain - will require a good amount of tuning!
+
+        // Pod turning PIDF
         leftPodPIDF = new PIDFController(0.05, 0, 0.001, 0.0);
         rightPodPIDF = new PIDFController(0.065, 0, 0.0015, 0.001);
 
