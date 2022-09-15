@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.teleop.support.MecTeleOpContainer;
  * Class to run a mecanum drivetrain
  * with basic TeleOp controls.
  */
-@TeleOp(name="BaseOp")
+@TeleOp
 public class BaseOpMec extends MecTeleOpContainer {
 //    protected ServoEx servo;
     @Override

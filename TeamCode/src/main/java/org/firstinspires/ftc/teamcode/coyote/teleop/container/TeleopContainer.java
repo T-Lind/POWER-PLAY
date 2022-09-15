@@ -15,7 +15,7 @@ abstract public class TeleopContainer extends OpMode {
     private boolean timerStarted = false;
 
     public void initMechanisms(){
-        imu.init();
+//        imu.init();
         myLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
     }
 
@@ -41,7 +41,7 @@ abstract public class TeleopContainer extends OpMode {
 
 
         double stickAngle = Math.toDegrees(Math.atan2(-leftStickX, leftStickY));
-        double stickMagnitude = Math.hypot(leftStickX, leftStickY);
+        double stickMagnitude = 1.25*Math.hypot(leftStickX, leftStickY);
         if(leftStickX == 0 && leftStickY == 0)
             stickAngle = 0;
 
