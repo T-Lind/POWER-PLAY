@@ -17,8 +17,8 @@ import java.util.ArrayList;
 @TeleOp
 public class AprilTagDemo extends LinearOpMode
 {
-    OpenCvCamera camera;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    private OpenCvCamera camera;
+    private AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     static final double FEET_PER_METER = 3.28084;
 
