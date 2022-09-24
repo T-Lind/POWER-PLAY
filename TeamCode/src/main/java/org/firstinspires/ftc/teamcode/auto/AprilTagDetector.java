@@ -129,7 +129,7 @@ public class AprilTagDetector extends LinearOpMode
         while (opModeIsActive()) {sleep(20);}
     }
 
-    @SuppressLint("DefaultLocale")P
+    @SuppressLint("DefaultLocale")
     void tagToTelemetry(AprilTagDetection detection)
     {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
